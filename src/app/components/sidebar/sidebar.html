@@ -1,0 +1,60 @@
+<aside class="w-[300px] min-w-[300px] h-screen bg-white dark:bg-[#2B2C37] 
+              border-r border-[#E4EBFA] dark:border-[#3E3F4E] 
+              flex flex-col">
+
+  <div class="h-[97px] flex items-center px-8 
+              border-b border-[#E4EBFA] dark:border-[#3E3F4E]">
+    <span class="text-2xl font-bold text-black dark:text-white">kanban</span>
+  </div>
+
+  <nav class="flex-1 overflow-y-auto pt-4">
+
+    <p class="text-[#828FA3] text-xs font-bold tracking-[2.4px] uppercase px-8 mb-5">
+      All Boards ({{ boards.length }})
+    </p>
+
+    <ul class="pr-6 space-y-1">
+
+      <li *ngFor="let board of boards">
+        <button
+          (click)="selectBoard(board)"
+          [class.bg-[#635FC7]]="activeBoard?.name === board.name"
+          [class.text-white]="activeBoard?.name === board.name"
+          [class.text-[#828FA3]]="activeBoard?.name !== board.name"
+          class="w-full flex items-center gap-4 px-8 py-[14px] 
+                 rounded-r-full font-bold text-[15px] transition-colors
+                 hover:bg-[#635FC7]/10 hover:text-[#635FC7]">
+          {{ board.name }}
+        </button>
+      </li>
+
+      <li>
+        <button class="w-full flex items-center gap-4 px-8 py-[14px] 
+                       rounded-r-full text-[#635FC7] font-bold text-[15px]">
+          + Create New Board
+        </button>
+      </li>
+
+    </ul>
+  </nav>
+
+  <div class="px-6 pb-8">
+    <div class="bg-[#F4F7FD] dark:bg-[#20212C] rounded-xl 
+                flex items-center justify-center gap-6 py-4">
+      <span class="text-[#828FA3] text-sm">☀️</span>
+
+      <button (click)="toggleTheme()"
+              class="w-10 h-5 rounded-full transition-colors relative"
+              [class.bg-[#635FC7]]="isDark"
+              [class.bg-[#828FA3]]="!isDark">
+        <span class="absolute top-[2px] w-4 h-4 bg-white rounded-full transition-all"
+              [class.left-[2px]]="!isDark"
+              [class.left-[18px]]="isDark">
+        </span>
+      </button>
+
+      <span class="text-[#828FA3] text-sm">🌙</span>
+    </div>
+  </div>
+
+</aside>

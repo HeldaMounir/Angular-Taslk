@@ -1,0 +1,68 @@
+<div class="flex gap-6 p-6 h-full overflow-x-auto">
+
+  <ng-container *ngIf="activeBoard; else emptyBoard">
+
+    <app-column
+      *ngFor="let column of activeBoard.columns"
+      [column]="column"
+      (taskClicked)="onTaskClicked($event)">
+    </app-column>
+
+    <!-- New Column Button -->
+    <div class="w-[280px] min-w-[280px] mt-10 flex-shrink-0">
+      <button
+        (click)="showAddColumn = true"
+        class="w-full h-full min-h-[500px] rounded-xl
+               bg-[#E4EBFA] dark:bg-[#2B2C37]/50
+               text-[#828FA3] font-bold text-xl
+               hover:text-[#635FC7] transition-colors">
+
+        + New Column
+
+      </button>
+    </div>
+
+  </ng-container>
+
+  <!-- Empty Board -->
+  <ng-template #emptyBoard>
+    <div class="flex-1 flex flex-col items-center justify-center gap-6">
+
+      <p class="text-[#828FA3] font-bold text-lg">
+        This board is empty. Create a new column to get started.
+      </p>
+
+      <button
+        class="bg-[#635FC7] hover:bg-[#A8A4FF]
+               text-white font-bold px-6 py-3
+               rounded-full transition-colors">
+
+        + Add New Column
+
+      </button>
+
+    </div>
+  </ng-template>
+
+  <app-task-detail-modal
+    *ngIf="selectedTask && activeBoard"
+    [task]="selectedTask"
+    [board]="activeBoard"
+    (closed)="closeModal()"
+    (taskDeleted)="onTaskDeleted($event)">
+  </app-task-detail-modal>
+
+  <app-add-task-modal
+    *ngIf="showAddTask && activeBoard"
+    [board]="activeBoard"
+    (closed)="showAddTask = false"
+    (taskAdded)="onTaskAdded($event)">
+  </app-add-task-modal>
+
+  <app-add-column-modal
+    *ngIf="showAddColumn"
+    (closed)="showAddColumn = false"
+    (columnAdded)="onColumnAdded($event)">
+  </app-add-column-modal>
+
+</div>

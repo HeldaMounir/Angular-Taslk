@@ -1,0 +1,20 @@
+<div class="w-[280px] min-w-[280px] flex flex-col gap-5 flex-shrink-0">
+
+  <div class="flex items-center gap-3">
+    <div class="w-4 h-4 rounded-full flex-shrink-0"
+         [style.background-color]="getDotColor()">
+    </div>
+
+    <h2 class="text-[#828FA3] text-xs font-bold tracking-[2.4px] uppercase">
+      {{ column.name }} ({{ column.tasks.length }})
+    </h2>
+  </div>
+
+  <div class="flex flex-col gap-5">
+   <app-task-card
+  *ngFor="let task of column.tasks"
+  [task]="task"
+  (taskClicked)="onTaskClicked($event)" />
+  </div>
+
+</div>

@@ -1,0 +1,130 @@
+<!-- Backdrop -->
+<div class="fixed inset-0 bg-black/50 z-40 flex items-center justify-center p-4"
+     (click)="close()">
+
+  <div class="bg-white dark:bg-[#2B2C37] rounded-2xl w-full max-w-[480px]
+              p-8 shadow-2xl max-h-[90vh] overflow-y-auto"
+       (click)="$event.stopPropagation()">
+
+    <h2 class="text-black dark:text-white font-bold text-lg mb-6">
+      Add New Task
+    </h2>
+
+    <form [formGroup]="taskForm" (ngSubmit)="onSubmit()">
+
+      <!-- Title -->
+      <div class="mb-6">
+        <label class="text-[#828FA3] dark:text-white text-xs font-bold block mb-2">
+          Title
+        </label>
+        <input
+          formControlName="title"
+          type="text"
+          placeholder="e.g. Take coffee break"
+          class="w-full bg-transparent border rounded-lg py-3 px-4
+                 text-black dark:text-white text-[13px] 
+                 placeholder-[#828FA3]/50 focus:outline-none transition-colors"
+          [class.border-[#EA5555]]="title?.invalid && title?.touched"
+          [class.border-[#E4EBFA]]="!(title?.invalid && title?.touched)"
+          [class.dark:border-[#3E3F4E]]="!(title?.invalid && title?.touched)">
+
+        <!-- Error message -->
+        <p *ngIf="title?.invalid && title?.touched"
+           class="text-[#EA5555] text-xs mt-1">
+          <span *ngIf="title?.errors?.['required']">Title is required</span>
+          <span *ngIf="title?.errors?.['minlength']">Min 3 characters</span>
+        </p>
+      </div>
+
+      <!-- Description -->
+      <div class="mb-6">
+        <label class="text-[#828FA3] dark:text-white text-xs font-bold block mb-2">
+          Description
+        </label>
+        <textarea
+          formControlName="description"
+          rows="4"
+          placeholder="e.g. It's always good to take a break..."
+          class="w-full bg-transparent border border-[#E4EBFA] dark:border-[#3E3F4E]
+                 rounded-lg py-3 px-4 text-black dark:text-white text-[13px]
+                 placeholder-[#828FA3]/50 focus:outline-none 
+                 focus:border-[#635FC7] transition-colors resize-none">
+        </textarea>
+      </div>
+
+      <!-- Subtasks -->
+      <div class="mb-6">
+        <label class="text-[#828FA3] dark:text-white text-xs font-bold block mb-3">
+          Subtasks
+        </label>
+
+        <!-- بنلف على الـ FormArray -->
+        <div formArrayName="subtasks" class="flex flex-col gap-3">
+          <div *ngFor="let subtask of subtasks.controls; let i = index"
+               [formGroupName]="i"
+               class="flex items-center gap-4">
+
+            <input
+              formControlName="title"
+              type="text"
+              placeholder="e.g. Make coffee"
+              class="flex-1 bg-transparent border rounded-lg py-3 px-4
+                     text-black dark:text-white text-[13px]
+                     placeholder-[#828FA3]/50 focus:outline-none transition-colors"
+              [class.border-[#EA5555]]="subtask.get('title')?.invalid && subtask.get('title')?.touched"
+              [class.border-[#E4EBFA]]="!(subtask.get('title')?.invalid && subtask.get('title')?.touched)">
+
+            <!-- زرار حذف الـ subtask -->
+            <button type="button"
+                    (click)="removeSubtask(i)"
+                    class="text-[#828FA3] hover:text-[#EA5555] 
+                           transition-colors text-xl flex-shrink-0">
+              ✕
+            </button>
+          </div>
+        </div>
+
+        <!-- زرار Add Subtask -->
+        <button type="button"
+                (click)="addSubtask()"
+                class="w-full mt-3 py-3 rounded-full
+                       bg-[#635FC7]/10 hover:bg-[#635FC7]/20
+                       text-[#635FC7] font-bold text-[13px] transition-colors">
+          + Add New Subtask
+        </button>
+      </div>
+
+      <!-- Status -->
+      <div class="mb-6">
+        <label class="text-[#828FA3] dark:text-white text-xs font-bold block mb-2">
+          Status
+        </label>
+        <div class="relative">
+          <select
+            formControlName="status"
+            class="w-full bg-transparent border border-[#E4EBFA] dark:border-[#3E3F4E]
+                   text-black dark:text-white rounded-lg py-3 px-4
+                   text-[13px] appearance-none cursor-pointer
+                   focus:outline-none focus:border-[#635FC7]">
+            <option *ngFor="let column of board.columns"
+                    [value]="column.name">
+              {{ column.name }}
+            </option>
+          </select>
+          <svg class="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none"
+               width="10" height="7" viewBox="0 0 10 7" fill="none">
+            <path d="M1 1l4 4 4-4" stroke="#635FC7" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+        </div>
+      </div>
+
+      <!-- Submit -->
+      <button type="submit"
+              class="w-full py-3 rounded-full bg-[#635FC7] hover:bg-[#A8A4FF]
+                     text-white font-bold text-[13px] transition-colors">
+        Create Task
+      </button>
+
+    </form>
+  </div>
+</div>

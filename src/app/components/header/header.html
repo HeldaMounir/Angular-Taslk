@@ -1,0 +1,49 @@
+<header class="h-[97px] min-h-[97px] bg-white dark:bg-[#2B2C37] 
+               border-b border-[#E4EBFA] dark:border-[#3E3F4E]
+               flex items-center justify-between px-6">
+
+  <h1 class="text-xl font-bold text-black dark:text-white">
+    {{ activeBoard?.name }}
+  </h1>
+
+  <div class="flex items-center gap-4">
+
+  <button (click)="onAddTask()"
+        class="bg-[#635FC7] hover:bg-[#A8A4FF] text-white 
+               font-bold text-[15px] px-6 py-3 rounded-full transition-colors">
+  + Add New Task
+</button>
+
+    <div class="relative">
+      <button (click)="toggleMenu()"
+              class="flex flex-col gap-[4px] items-center p-2">
+        <span class="w-[4px] h-[4px] rounded-full bg-[#828FA3]"></span>
+        <span class="w-[4px] h-[4px] rounded-full bg-[#828FA3]"></span>
+        <span class="w-[4px] h-[4px] rounded-full bg-[#828FA3]"></span>
+      </button>
+
+      <div *ngIf="menuOpen"
+           class="absolute right-0 top-full mt-2 w-48 
+                  bg-white dark:bg-[#20212C] rounded-2xl 
+                  shadow-xl border border-[#E4EBFA] dark:border-[#3E3F4E] 
+                  py-2 z-50">
+        <button class="w-full text-left px-4 py-3 text-[15px] 
+                       text-[#828FA3] hover:text-black dark:hover:text-white transition-colors">
+          Edit Board
+        </button>
+      <button (click)="openDeleteModal()"
+        class="w-full text-left px-4 py-3 text-[13px]
+               text-[#EA5555] hover:text-[#EA5555]/80 transition-colors">
+  Delete Board
+</button>
+      </div>
+    </div>
+
+  </div>
+</header>
+<app-delete
+  *ngIf="showDeleteModal && activeBoard"
+  type="board"
+  [name]="activeBoard.name"
+  (confirmed)="onDeleteConfirmed()"
+  (closed)="showDeleteModal = false" />

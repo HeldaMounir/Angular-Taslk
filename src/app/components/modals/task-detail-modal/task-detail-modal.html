@@ -1,0 +1,101 @@
+<!-- Backdrop -->
+<div class="fixed inset-0 bg-black/50 z-40 flex items-center justify-center p-4"
+     (click)="close()">
+
+  <div class="bg-white dark:bg-[#2B2C37] rounded-2xl w-full max-w-[480px] 
+              p-8 shadow-2xl max-h-[90vh] overflow-y-auto z-50"
+       (click)="$event.stopPropagation()">
+
+    <div class="flex items-start justify-between gap-4 mb-6">
+      <h2 class="text-black dark:text-white font-bold text-lg leading-snug">
+        {{ task.title }}
+      </h2>
+
+      <div class="relative flex-shrink-0">
+        <button (click)="toggleMenu()"
+                class="flex flex-col gap-[4px] items-center p-2">
+          <span class="w-[4px] h-[4px] rounded-full bg-[#828FA3]"></span>
+          <span class="w-[4px] h-[4px] rounded-full bg-[#828FA3]"></span>
+          <span class="w-[4px] h-[4px] rounded-full bg-[#828FA3]"></span>
+        </button>
+
+        <div *ngIf="menuOpen"
+             class="absolute right-0 top-full mt-1 w-48
+                    bg-white dark:bg-[#20212C] rounded-2xl
+                    border border-[#E4EBFA] dark:border-[#3E3F4E]
+                    py-2 z-10">
+          <button class="w-full text-left px-4 py-3 text-[13px] 
+                         text-[#828FA3] hover:text-black dark:hover:text-white transition-colors">
+            Edit Task
+          </button>
+       <button (click)="openDeleteModal()"
+        class="w-full text-left px-4 py-3 text-[13px]
+               text-[#EA5555] hover:text-[#EA5555]/80 transition-colors">
+  Delete Task
+</button>
+        </div>
+      </div>
+    </div>
+
+    <p *ngIf="task.description"
+       class="text-[#828FA3] text-[13px] leading-relaxed mb-6">
+      {{ task.description }}
+    </p>
+
+    <div class="mb-6">
+      <p class="text-[#828FA3] text-xs font-bold mb-4">
+        Subtasks ({{ completedCount }} of {{ task.subtasks.length }})
+      </p>
+
+      <div class="flex flex-col gap-3">
+        <label *ngFor="let subtask of task.subtasks"
+               class="flex items-start gap-4 bg-[#F4F7FD] dark:bg-[#20212C] 
+                      rounded-lg p-4 cursor-pointer 
+                      hover:bg-[#635FC7]/20 transition-colors">
+
+          <input type="checkbox"
+                 [checked]="subtask.isCompleted"
+                 (change)="toggleSubtask(subtask)"
+                 class="w-4 h-4 mt-[2px] accent-[#635FC7] 
+                        flex-shrink-0 cursor-pointer">
+
+          <span class="text-xs font-bold transition-colors"
+                [class.text-black]="!subtask.isCompleted"
+                [class.dark:text-white]="!subtask.isCompleted"
+                [class.text-[#828FA3]]="subtask.isCompleted"
+                [class.line-through]="subtask.isCompleted">
+            {{ subtask.title }}
+          </span>
+
+        </label>
+      </div>
+    </div>
+
+    <div>
+      <p class="text-[#828FA3] text-xs font-bold mb-2">Current Status</p>
+      <div class="relative">
+        <select [(ngModel)]="task.status"
+                class="w-full bg-transparent border border-[#E4EBFA] dark:border-[#3E3F4E]
+                       text-black dark:text-white rounded-lg py-3 px-4 
+                       text-[13px] appearance-none cursor-pointer 
+                       focus:outline-none focus:border-[#635FC7]">
+          <option *ngFor="let column of board.columns"
+                  [value]="column.name">
+            {{ column.name }}
+          </option>
+        </select>
+        <svg class="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none"
+             width="10" height="7" viewBox="0 0 10 7" fill="none">
+          <path d="M1 1l4 4 4-4" stroke="#635FC7" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+      </div>
+    </div>
+
+  </div>
+</div>
+<app-delete
+  *ngIf="showDeleteModal"
+  type="task"
+  [name]="task.title"
+  (confirmed)="onDeleteConfirmed()"
+  (closed)="showDeleteModal = false" />
