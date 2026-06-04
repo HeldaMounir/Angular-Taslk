@@ -28,12 +28,13 @@
         </button>
       </li>
 
-      <li>
-        <button class="w-full flex items-center gap-4 px-8 py-[14px] 
-                       rounded-r-full text-[#635FC7] font-bold text-[15px]">
-          + Create New Board
-        </button>
-      </li>
+   <li>
+  <button (click)="showAddBoard = true"
+          class="w-full flex items-center gap-4 px-8 py-[14px]
+                 rounded-r-full text-[#635FC7] font-bold text-[15px]">
+    + Create New Board
+  </button>
+</li>
 
     </ul>
   </nav>
@@ -58,3 +59,7 @@
   </div>
 
 </aside>
+<app-add-board-modal
+  *ngIf="showAddBoard"
+  (closed)="showAddBoard = false"
+  (boardAdded)="onBoardAdded($event)" />

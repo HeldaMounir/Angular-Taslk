@@ -2,10 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { BoardService } from '../../services/board';
 import { Board } from '../../models/board.model';
+import { AddBoardModalComponent } from '../modals/add-board-modal/add-board-modal';
 
 @Component({
   selector: 'app-sidebar',
-  imports: [CommonModule],
+  standalone:true,
+  imports: [CommonModule , AddBoardModalComponent ],
   templateUrl: './sidebar.html',
   styleUrl: './sidebar.css'
 })
@@ -14,6 +16,8 @@ export class Sidebar implements OnInit {
   boards: Board[] = [];
   activeBoard: Board | null = null;
   isDark = true;
+  showAddBoard = false;
+
 
   constructor(private boardService: BoardService) {}
 
@@ -35,4 +39,8 @@ export class Sidebar implements OnInit {
     this.isDark = !this.isDark;
     document.documentElement.classList.toggle('dark', this.isDark);
   }
+  onBoardAdded(board: Board): void {
+  this.boardService.addBoard(board);
+  this.showAddBoard = false;
+}
 }

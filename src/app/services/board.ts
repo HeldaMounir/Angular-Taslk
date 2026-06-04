@@ -25,6 +25,7 @@ export class BoardService {
         this.activeBoard.next(response.boards[0]);
       });
   }
+  
 
   setActiveBoard(board: Board): void {
     this.activeBoard.next(board);
@@ -42,4 +43,10 @@ export class BoardService {
       updated.length > 0 ? updated[0] : null
     );
   }
+  addBoard(board: Board): void {
+  const updated = [...this.board.value, board];
+  this.board.next(updated);
+
+  this.activeBoard.next(board);
+}
 }

@@ -1,0 +1,85 @@
+<div class="fixed inset-0 bg-black/50 z-40 flex items-center justify-center p-4"
+     (click)="close()">
+
+  <div class="bg-white dark:bg-[#2B2C37] rounded-2xl w-full max-w-[480px]
+              p-8 shadow-2xl max-h-[90vh] overflow-y-auto"
+       (click)="$event.stopPropagation()">
+
+    <h2 class="text-black dark:text-white font-bold text-lg mb-6">
+      Add New Board
+    </h2>
+
+    <form [formGroup]="boardForm" (ngSubmit)="onSubmit()">
+
+      <!-- Board Name -->
+      <div class="mb-6">
+        <label class="text-[#828FA3] text-xs font-bold block mb-2">
+          Board Name
+        </label>
+        <input
+          formControlName="name"
+          type="text"
+          placeholder="e.g. Web Design"
+          class="w-full bg-transparent border rounded-lg py-3 px-4
+                 text-black dark:text-white text-[13px]
+                 placeholder-[#828FA3]/50 focus:outline-none transition-colors"
+          [class.border-[#EA5555]]="name?.invalid && name?.touched"
+          [class.border-[#E4EBFA]]="!(name?.invalid && name?.touched)"
+          [class.dark:border-[#3E3F4E]]="!(name?.invalid && name?.touched)">
+
+        <p *ngIf="name?.invalid && name?.touched"
+           class="text-[#EA5555] text-xs mt-1">
+          Board name is required
+        </p>
+      </div>
+
+      <!-- Columns -->
+      <div class="mb-6">
+        <label class="text-[#828FA3] text-xs font-bold block mb-3">
+          Board Columns
+        </label>
+
+        <div formArrayName="columns" class="flex flex-col gap-3">
+          <div *ngFor="let column of columns.controls; let i = index"
+               [formGroupName]="i"
+               class="flex items-center gap-4">
+
+            <input
+              formControlName="name"
+              type="text"
+              placeholder="e.g. Todo"
+              class="flex-1 bg-transparent border rounded-lg py-3 px-4
+                     text-black dark:text-white text-[13px]
+                     placeholder-[#828FA3]/50 focus:outline-none transition-colors"
+              [class.border-[#EA5555]]="column.get('name')?.invalid && column.get('name')?.touched"
+              [class.border-[#E4EBFA]]="!(column.get('name')?.invalid && column.get('name')?.touched)">
+
+            <button type="button"
+                    (click)="removeColumn(i)"
+                    class="text-[#828FA3] hover:text-[#EA5555] 
+                           transition-colors text-xl flex-shrink-0">
+              ✕
+            </button>
+          </div>
+        </div>
+
+        <!-- Add Column -->
+        <button type="button"
+                (click)="addColumn()"
+                class="w-full mt-3 py-3 rounded-full
+                       bg-[#635FC7]/10 hover:bg-[#635FC7]/20
+                       text-[#635FC7] font-bold text-[13px] transition-colors">
+          + Add New Column
+        </button>
+      </div>
+
+      <!-- Submit -->
+      <button type="submit"
+              class="w-full py-3 rounded-full bg-[#635FC7] hover:bg-[#A8A4FF]
+                     text-white font-bold text-[13px] transition-colors">
+        Create New Board
+      </button>
+
+    </form>
+  </div>
+</div>
